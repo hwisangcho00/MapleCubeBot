@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands
 import responses
 import os
 
@@ -20,15 +21,19 @@ def run_discord_bot():
 
     intents = discord.Intents.default()
     intents.message_content = True
-    client = discord.Client(intents=intents)
 
-    @client.event
+    bot = commands.Bot(command_prefix='!', intents = intents)
+
+    # client = discord.Client(intents=intents)
+
+    @bot.event
     async def on_ready():   
-        print(f'{client.user} is now running!')
 
-    @client.event
+        print(f'{bot.user} is now running!')
+
+    @bot.event
     async def on_message(message):
-        if message.author == client.user:
+        if message.author == bot.user:
             return
         
         username = str(message.author)
@@ -43,4 +48,4 @@ def run_discord_bot():
         else:
             await send_message(message, user_message, is_private=False)
     
-    client.run(TOKEN)
+    bot.run(TOKEN)
