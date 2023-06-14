@@ -53,4 +53,26 @@ def run_discord_bot():
     async def _hello(ctx):
         await ctx.send('Hey there!')
 
+    @bot.command(name='cube')
+    async def _cube(ctx, cubeName, tier, equipment, level):
+        cubeList = ["bright", "glowing"]
+        tierList = ["rare", "epic", "unique", "legendary"]
+        equipmentList = ["weapon", "emblem", "secondary", "hat", "eye", "face", "earings", "belt", "top", "bottom", "overall"
+                         "shoes", "gloves", "shoulder", "cape"]
+
+        cubeName = cubeName.lower()
+        tier = tier.lower()
+        equipment = equipment.lower()
+        
+        if cubeName not in cubeList:
+            await ctx.send(f'{cubeName} is not a valid cube')
+
+        if tier not in tierList:
+            await ctx.send(f'{tier} is not a valid tier')
+
+        if equipment not in equipmentList:
+            await ctx.send(f'{equipment} is not a valid equipment')
+
+        await ctx.send(f'Rolling {cubeName} cube on lvl {level} {equipment}. Current tier : {tier}')
+
     bot.run(TOKEN)
