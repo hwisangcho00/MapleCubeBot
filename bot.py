@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import responses
 import os
+import random
+import cubeProb
 
 from dotenv import load_dotenv
 
@@ -66,13 +68,21 @@ def run_discord_bot():
         
         if cubeName not in cubeList:
             await ctx.send(f'{cubeName} is not a valid cube')
+            return
 
         if tier not in tierList:
             await ctx.send(f'{tier} is not a valid tier')
+            return
 
         if equipment not in equipmentList:
             await ctx.send(f'{equipment} is not a valid equipment')
+            return
+
+        
+
 
         await ctx.send(f'Rolling {cubeName} cube on lvl {level} {equipment}. Current tier : {tier}')
+
+
 
     bot.run(TOKEN)
