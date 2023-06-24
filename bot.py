@@ -4,6 +4,8 @@ import responses
 import os
 import random
 import cubeProb
+from CubeSimulator import CubeSimulator
+from cubeIdx import cubeList, rankList, equipmentList
 
 from dotenv import load_dotenv
 
@@ -56,32 +58,29 @@ def run_discord_bot():
         await ctx.send('Hey there!')
 
     @bot.command(name='cube')
-    async def _cube(ctx, cubeName, tier, equipment, level):
-        cubeList = ["bright", "glowing"]
-        tierList = ["rare", "epic", "unique", "legendary"]
-        equipmentList = ["weapon", "emblem", "secondary", "hat", "eye", "face", "earings", "belt", "top", "bottom", "overall"
-                         "shoes", "gloves", "shoulder", "cape"]
+    async def _cube(ctx, cubeName, rank, equipment, level):
 
         cubeName = cubeName.lower()
-        tier = tier.lower()
+        rank = rank.lower()
         equipment = equipment.lower()
         
         if cubeName not in cubeList:
             await ctx.send(f'{cubeName} is not a valid cube')
             return
 
-        if tier not in tierList:
-            await ctx.send(f'{tier} is not a valid tier')
+        if rank not in rankList:
+            await ctx.send(f'{rank} is not a valid tier')
             return
 
         if equipment not in equipmentList:
             await ctx.send(f'{equipment} is not a valid equipment')
             return
 
+        cs = CubeSimulator(cubeName, rank, equipment, level)
         
+        cs.rollCube()
 
-
-        await ctx.send(f'Rolling {cubeName} cube on lvl {level} {equipment}. Current tier : {tier}')
+        await ctx.send(f'Rolling {cubeName} cube on lvl {level} {equipment}. Current rank : {rank}')
 
 
 

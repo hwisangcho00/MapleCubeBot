@@ -5,6 +5,7 @@ import random
 # 1 index: bright cube
 
 # first, second, third lines for outer index
+
 legendary_weapon_120_200 = [
     {
         "STR : +12%" : [9.7562, 9.7562],
@@ -84,21 +85,12 @@ legendary_weapon_120_200 = [
     }
 ]
 
-rng = random.uniform(0, 100)
-cur = 100.0
-res = ""
-sum = 0
+legendary_weapon = [
+    legendary_weapon_120_200,
+    []
+]
 
-for k, v in legendary_weapon_120_200[2].items():
-    sum += v[1]
+legendary = [
+    legendary_weapon
+]
 
-for k, v in legendary_weapon_120_200[2].items():
-
-    if rng > cur - v[1]:
-        res = k
-        break
-    
-    cur -= v[1]
-
-
-print(rng, res, sum)
