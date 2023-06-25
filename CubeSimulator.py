@@ -12,22 +12,21 @@ class CubeSimulator:
         self.level = int(level)
 
     def rollCube(self) -> str:
+        prob = 100
+        for lineNum in range(3):        
+            probList = self.getProbList(lineNum)
+            resLine = self.rollLine(probList, prob)
+            self.changeProb(prob, probList)
+            print(resLine)
 
-        firstLine = self.rollLine(0)
 
-        print(firstLine)
-
-
-    def rollLine(self, lineNum) -> str:
+    def rollLine(self, probList, prob) -> str:
         
         res = None
-
-        probList = self.getProbList(lineNum)
 
         i = 0 if self.cubeName == 'glowing' else 1
 
         rng = random.uniform(0, 100)
-        cur = 100.0
         res = ""
         sum = 0
 
@@ -36,18 +35,15 @@ class CubeSimulator:
 
         for k, v in probList.items():
 
-            if rng > cur - v[i]:
+            if rng > prob - v[i]:
                 res = k
                 break
             
-            cur -= v[i]
+            prob -= v[i]
 
         print(rng, res, sum)
         
         return res
-
-            
-
 
     def getProbList(self, lineNum):
 
@@ -58,6 +54,8 @@ class CubeSimulator:
         else:
             return
 
-
         if self.tier == 'legendary':
             return cubeProb.legendary[equipmentIdx[self.equipment]][levelIdx][lineNum]
+        
+    def changeProb(self, prob, probList):
+        pass
