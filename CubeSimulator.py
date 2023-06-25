@@ -6,9 +6,10 @@ from cubeIdx import equipmentIdx, validCheckList
 
 class CubeSimulator:
     
-    def __init__(self, cubeName, tier, equipment, level) -> None:
+    def __init__(self, cubeName, rank, equipment, level) -> None:
         self.cubeName = cubeName
-        self.tier = tier
+        self.cubeI = 0 if self.cubeName == 'glowing' else 1
+        self.rank = rank
         self.equipment = equipment
         self.level = int(level)
         self.validCount = [0] * len(validCheckList)
@@ -18,37 +19,34 @@ class CubeSimulator:
         prob = 100
         resLine = None
         for lineNum in range(3):
-            print(self.validCount)
             probList = self.getProbList(lineNum)
             if lineNum != 0:
-                self.changeProb(prob, probList, resLine)
+                prob = self.changeProb(prob, probList, resLine)
             resLine = self.rollLine(probList, prob)
+            print((lineNum + 1), resLine, '\n', self.validCount, '\n', probList, '\n')
             self.updateValidCount(resLine)
-            print((lineNum + 1),'Line =',resLine)
+
+            
 
 
     def rollLine(self, probList, prob) -> str:
         
         res = None
 
-        i = 0 if self.cubeName == 'glowing' else 1
-
         rng = random.uniform(0, 100)
         res = ""
         sum = 0
 
         for k, v in probList.items():
-            sum += v[i]
+            sum += v[self.cubeI]
 
         for k, v in probList.items():
 
-            if rng > prob - v[i]:
+            if rng > prob - v[self.cubeI]:
                 res = k
                 break
             
-            prob -= v[i]
-
-        print(rng, res, sum)
+            prob -= v[self.cubeI]
         
         return res
 
@@ -61,12 +59,22 @@ class CubeSimulator:
         else:
             return
 
-        if self.tier == 'legendary':
+        if self.rank == 'legendary':
             return cubeProb.legendary[equipmentIdx[self.equipment]][levelIdx][lineNum].copy()
         
     def changeProb(self, prob, probList, resLine):
-        pass
+        i = 0 if self.cubeName == 'glowing' else 1
+        limit = [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2]
+        for idx, potential in enumerate(validCheckList):
+            if self.validCount[idx] >= limit[idx]:
+                for k, v in list(probList.items()):
+                    if re.match(potential, k):
+                        prob -= v[self.cubeI]
+                        del probList[k]
 
+        return prob
+
+    
     def updateValidCount(self, resLine):
         
         for idx, potential in enumerate(validCheckList):

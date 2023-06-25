@@ -29,29 +29,11 @@ def run_discord_bot():
     bot = commands.Bot(command_prefix='!', intents = intents, 
                        help_command=commands.MinimalHelpCommand())
 
-    # client = discord.Client(intents=intents)
-
     @bot.event
     async def on_ready():   
 
         print(f'{bot.user} is now running!')
 
-    # @bot.event
-    # async def on_message(message):
-    #     if message.author == bot.user:
-    #         return
-        
-    #     username = str(message.author)
-    #     user_message = str(message.content)
-    #     channel = str(message.channel)
-
-    #     print(f'{username} said: "{user_message}" ({channel})')
-
-    #     if user_message[0] == '?':
-    #         user_message = user_message[1:]
-    #         await send_message(message, user_message, is_private=True)
-    #     else:
-    #         await send_message(message, user_message, is_private=False)
     
     @bot.command(name='hello')
     async def _hello(ctx):
