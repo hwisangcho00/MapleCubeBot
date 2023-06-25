@@ -3,7 +3,8 @@ rankList = ["rare", "epic", "unique", "legendary"]
 equipmentList = ["weapon", "emblem", "secondary", "hat", "eye", "face", "earings", "belt", "top", "bottom", "overall"
                     "shoes", "gloves", "shoulder", "cape"]
 
-validCheckList = ["Enables the <Decent Haste> skill", "Enables the <Decent Combat Orders> skill", "Enables the <Decent Advanced Blessing> skill",
+validCheckList = ["Enables the <Decent Haste> skill", "Enables the <Decent Combat Orders> skill", 
+                  "Enables the <Decent Advanced Blessing> skill",
                   "Enables the <Decent Mystic Door> skill", "Enables the <Decent Hyper Body> skill", 
                   "Enables the <Decent Speed Infusion> skill", "Enables the <Decent Sharp Eyes> skill", 
                   "Invincible for 3 more seconds after getting attacked", "Ignore Monster DEF : \+\d{0,2}",
