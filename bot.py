@@ -60,10 +60,9 @@ def run_discord_bot():
 
         cs = CubeSimulator(cubeName, rank, equipment, level)
         
-        cs.rollCube()
+        res = cs.rollCube()
 
-        await ctx.send(f'Rolling {cubeName} cube on lvl {level} {equipment}. Current rank : {rank}')
-
-
+        await ctx.send(f'Rolling {cubeName} cube on lvl {level} {equipment}. Current rank : {rank} \n')
+        await ctx.send(res)
 
     bot.run(TOKEN)

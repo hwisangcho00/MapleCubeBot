@@ -18,16 +18,16 @@ class CubeSimulator:
     def rollCube(self) -> str:
         prob = 100
         resLine = None
+        res = ""
         for lineNum in range(3):
             probList = self.getProbList(lineNum)
             if lineNum != 0:
-                prob = self.changeProb(prob, probList, resLine)
+                prob = self.changeProb(prob, probList)
             resLine = self.rollLine(probList, prob)
+            res += resLine + "\n"
             print((lineNum + 1), resLine, '\n', self.validCount, '\n', probList, '\n')
             self.updateValidCount(resLine)
-
-            
-
+        return res
 
     def rollLine(self, probList, prob) -> str:
         
@@ -36,6 +36,8 @@ class CubeSimulator:
         rng = random.uniform(0, 100)
         res = ""
         sum = 0
+
+        lastKey = list(probList.keys())[-1]
 
         for k, v in probList.items():
             sum += v[self.cubeI]
@@ -48,13 +50,16 @@ class CubeSimulator:
             
             prob -= v[self.cubeI]
         
+        if res == "":
+            res = lastKey
+
         return res
 
     def getProbList(self, lineNum):
 
-        if 120 <= self.level <= 200:
+        if 120 <= self.level <= 150:
             levelIdx = 0
-        elif self.level == 250:
+        elif self.level > 150:
             levelIdx = 1
         else:
             return
@@ -62,7 +67,7 @@ class CubeSimulator:
         if self.rank == 'legendary':
             return cubeProb.legendary[equipmentIdx[self.equipment]][levelIdx][lineNum].copy()
         
-    def changeProb(self, prob, probList, resLine):
+    def changeProb(self, prob, probList):
         i = 0 if self.cubeName == 'glowing' else 1
         limit = [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2]
         for idx, potential in enumerate(validCheckList):
@@ -70,6 +75,7 @@ class CubeSimulator:
                 for k, v in list(probList.items()):
                     if re.match(potential, k):
                         prob -= v[self.cubeI]
+                        print("The following ability cannot appear anymore : ", k)
                         del probList[k]
 
         return prob
