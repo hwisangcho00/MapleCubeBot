@@ -1,7 +1,8 @@
 cubeList = ["bright", "glowing"]
 rankList = ["rare", "epic", "unique", "legendary"]
-equipmentList = ["weapon", "emblem", "secondary", "hat", "eye", "face", "earings", "belt", "top", "bottom", "overall"
-                    "shoes", "gloves", "shoulder", "cape"]
+equipmentList = ["weapon", "emblem", "secondary", "eye", "face", "earings", "pendant", "ring", 
+                 "hat", "top", "overall", "bottom", 
+                    "shoes", "gloves", "shoulder", "cape", "belt"]
 
 validCheckList = ["Enables the <Decent Haste> skill", "Enables the <Decent Combat Orders> skill", 
                   "Enables the <Decent Advanced Blessing> skill",
