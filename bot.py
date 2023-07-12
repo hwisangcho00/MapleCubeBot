@@ -40,7 +40,7 @@ def run_discord_bot():
         await ctx.send('Hey there!')
 
     @bot.command(name='cube')
-    async def _cube(ctx, cubeName, rank, equipment, level):
+    async def cube(ctx, cubeName: str, rank: str, equipment:str , level: int):
 
         cubeName = cubeName.lower()
         rank = rank.lower()
@@ -61,8 +61,10 @@ def run_discord_bot():
         cs = CubeSimulator(cubeName, rank, equipment, level)
         
         res = cs.rollCube()
+        
+        embed = discord.Embed(title="Cube result")
+        embed.add_field(name = f'Rolling {cubeName} cube on lvl {level} {equipment}. Current rank : {rank} \n', value = res)
 
-        await ctx.send(f'Rolling {cubeName} cube on lvl {level} {equipment}. Current rank : {rank} \n')
-        await ctx.send(res)
+        await ctx.reply(embed=embed, mention_author=False)
 
     bot.run(TOKEN)
