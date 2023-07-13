@@ -24,7 +24,7 @@ class CubeSimulator:
             if lineNum != 0:
                 prob = self.changeProb(prob, probList)
             resLine = self.rollLine(probList, prob)
-            res += resLine + "\n"
+            res += "- " + resLine + "\n"
             print((lineNum + 1), resLine, '\n', self.validCount, '\n', probList, '\n')
             self.updateValidCount(resLine)
         return res

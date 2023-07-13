@@ -56,18 +56,18 @@ def run_discord_bot():
         print(f'{bot.user} is now running!')
 
     @bot.command(name='cube')
-    async def cube(ctx, cubeName: str, rank: str, equipment:str , level: int):
+    async def cube(ctx, cubeName: str, rank: str, equipment:str , level: str):
         """testing!\nyes"""
         cubeName = cubeName.lower()
         rank = rank.lower()
         equipment = equipment.lower()
         
         if cubeName not in cubeList:
-            await ctx.send(f'{cubeName} is not a valid cube')
+            await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
             return
 
         if rank not in rankList:
-            await ctx.send(f'{rank} is not a valid tier')
+            await ctx.send(f'Error (rank): {rank} is not a valid tier')
             return
 
         if rank != 'legendary':
@@ -75,18 +75,24 @@ def run_discord_bot():
             return
 
         if equipment not in equipmentList:
-            await ctx.send(f'{equipment} is not a valid equipment')
+            await ctx.send(f'Error (equipment): {equipment} is not a valid equipment')
             return
 
+        if not level.isnumeric(): 
+            await ctx.send("Error (level): Please input a numeric value between 120 and 250")
+            return
+
+        level = int(level)
+
         if not 120 <= level <= 250:
-            await ctx.send("Please input value between 120 and 250")
+            await ctx.send("Error (level): Please input value between 120 and 250")
             return
 
         cs = CubeSimulator(cubeName, rank, equipment, level)
         
         res = cs.rollCube()
         
-        embed = discord.Embed(title="Cube result")
+        embed = discord.Embed(title="Cube result", color = discord.Color.orange())
         embed.add_field(name = f'Rolling {cubeName} cube on lvl {level} {equipment}. Current rank : {rank} \n', value = res)
 
         await ctx.reply(embed=embed, mention_author=False)
