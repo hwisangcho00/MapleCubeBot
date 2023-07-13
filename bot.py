@@ -9,14 +9,33 @@ from cubeIdx import cubeList, rankList, equipmentList
 
 from dotenv import load_dotenv
 
+class MyHelp(commands.HelpCommand):
+    def get_command_signature(self, command):
+        return '%s%s %s' % (self.context.clean_prefix, command.qualified_name, command.signature)
 
+    async def send_bot_help(self, mapping):
+        embed = discord.Embed(title="Help", color=discord.Color.blurple())
 
-async def send_message(message, user_message, is_private):
-    try:
-        response = responses.handle_response(user_message)
-        await message.author.send(response) if is_private else await message.channel.send(response)
-    except Exception as e:
-        print(e)
+        for cog, commands in mapping.items():
+           filtered = await self.filter_commands(commands, sort=True)
+           command_signatures = [self.get_command_signature(c) for c in filtered]
+
+           if command_signatures:
+                cog_name = getattr(cog, "qualified_name", "No Category")
+                embed.add_field(name=cog_name, value="\n".join(command_signatures), inline=False)
+
+        channel = self.get_destination()
+        await channel.send(embed=embed)
+
+    async def send_command_help(self, command):
+        embed = discord.Embed(title=self.get_command_signature(command), color=discord.Color.random())
+        if command.help:
+            embed.description = command.help
+        if alias := command.aliases:
+            embed.add_field(name="Aliases", value=", ".join(alias), inline=False)
+
+        channel = self.get_destination()
+        await channel.send(embed=embed)
 
 def run_discord_bot():
 
@@ -29,19 +48,16 @@ def run_discord_bot():
     bot = commands.Bot(command_prefix='!', intents = intents, 
                        help_command=commands.MinimalHelpCommand())
 
+    bot.help_command = MyHelp()
+
     @bot.event
     async def on_ready():   
 
         print(f'{bot.user} is now running!')
 
-    
-    @bot.command(name='hello')
-    async def _hello(ctx):
-        await ctx.send('Hey there!')
-
     @bot.command(name='cube')
     async def cube(ctx, cubeName: str, rank: str, equipment:str , level: int):
-
+        """testing!\nyes"""
         cubeName = cubeName.lower()
         rank = rank.lower()
         equipment = equipment.lower()
@@ -54,8 +70,16 @@ def run_discord_bot():
             await ctx.send(f'{rank} is not a valid tier')
             return
 
+        if rank != 'legendary':
+            await ctx.send("Currently only legendary rank is supported")
+            return
+
         if equipment not in equipmentList:
             await ctx.send(f'{equipment} is not a valid equipment')
+            return
+
+        if not 120 <= level <= 250:
+            await ctx.send("Please input value between 120 and 250")
             return
 
         cs = CubeSimulator(cubeName, rank, equipment, level)
