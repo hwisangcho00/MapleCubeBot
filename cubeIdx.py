@@ -1,6 +1,6 @@
 cubeList = ["bright", "glowing"]
 rankList = ["rare", "epic", "unique", "legendary"]
-equipmentList = ["weapon", "emblem", "secondary", "eye", "face", "earings", "pendant", "ring", 
+equipmentList = ["weapon", "emblem", "secondary", "eye", "face", "earrings", "pendant", "ring", 
                  "hat", "top", "overall", "bottom", 
                     "shoes", "gloves", "shoulder", "cape", "belt"]
 

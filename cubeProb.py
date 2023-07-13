@@ -705,7 +705,7 @@ legendary_face_151 = [
     }
 ]
 
-legendary_earings_150 = [
+legendary_earrings_150 = [
     {
         "STR : +12%" : [10.2564, 10.2564],
         "DEX : +12%" : [10.2564, 10.2564],
@@ -762,7 +762,7 @@ legendary_earings_150 = [
         "Item Drop Rate : +20%": [0.0769, 0.3846]
     }
 ]
-legendary_earings_151 = [
+legendary_earrings_151 = [
     {
         "STR : +13%" : [10.2564, 10.2564],
         "DEX : +13%" : [10.2564, 10.2564],
@@ -2203,9 +2203,9 @@ legendary_face = [
     legendary_face_151
 ]
 
-legendary_earings = [
-    legendary_earings_150,
-    legendary_earings_151
+legendary_earrings = [
+    legendary_earrings_150,
+    legendary_earrings_151
 ]
 
 legendary_pendant = [
@@ -2269,7 +2269,7 @@ legendary = [
     legendary_secondary,
     legendary_eye,
     legendary_face,
-    legendary_earings,
+    legendary_earrings,
     legendary_pendant,
     legendary_ring,
     legendary_hat,
