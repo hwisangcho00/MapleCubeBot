@@ -55,9 +55,19 @@ def run_discord_bot():
 
         print(f'{bot.user} is now running!')
 
+    @bot.event
+    async def on_command_error(ctx, error):
+        if isinstance(error, commands.errors.MissingRequiredArgument):
+          await ctx.send("Please pass in all required arguments. Type <!help cube> for more information.")
+
     @bot.command(name='cube')
     async def cube(ctx, cubeName: str, rank: str, equipment:str , level: str):
-        """testing!\nyes"""
+        """
+        cubeName: glowing / bright
+        rank: legendary
+        equipment: weapon / emblem / secondary / eye / face / earrings / pendant / ring / hat / top / overall / bottom
+        level: 120 ~ 250
+        """
         cubeName = cubeName.lower()
         rank = rank.lower()
         equipment = equipment.lower()

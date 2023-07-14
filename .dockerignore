@@ -1,0 +1,6 @@
+# flyctl launch added from .gitignore
+# ignore .env file
+**\.env
+**\requirements.txt
+**\Dockerfile
+fly.toml
