@@ -108,3 +108,7 @@ def run_discord_bot():
         await ctx.reply(embed=embed, mention_author=False)
 
     bot.run(TOKEN)
+
+if __name__ == '__main__':
+  # run the bot
+  run_discord_bot()
