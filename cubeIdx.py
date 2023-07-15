@@ -1,3 +1,6 @@
+"""
+Master file that keeps track of names and potentials for the cubing
+"""
 cubeList = ["bright", "glowing"]
 rankList = ["rare", "epic", "unique", "legendary"]
 equipmentList = ["weapon", "emblem", "secondary", "eye", "face", "earrings", "pendant", "ring", 

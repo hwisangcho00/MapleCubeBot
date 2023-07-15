@@ -9,7 +9,11 @@ from cubeIdx import cubeList, rankList, equipmentList
 
 from dotenv import load_dotenv
 
+
 class MyHelp(commands.HelpCommand):
+    """
+    A class that overrides the bots default help command
+    """
     def get_command_signature(self, command):
         return '%s%s %s' % (self.context.clean_prefix, command.qualified_name, command.signature)
 
@@ -38,21 +42,23 @@ class MyHelp(commands.HelpCommand):
         await channel.send(embed=embed)
 
 def run_discord_bot():
+    """
+    Central method that initiates and runs the discord bot.\\
+    Defines specific commands for the bot.
+    """
 
     load_dotenv()
     TOKEN = os.getenv('DISCORD_TOKEN')
 
+    # Bot initialization
     intents = discord.Intents.default()
     intents.message_content = True
-
     bot = commands.Bot(command_prefix='!', intents = intents, 
                        help_command=commands.MinimalHelpCommand())
-
     bot.help_command = MyHelp()
 
     @bot.event
     async def on_ready():   
-
         print(f'{bot.user} is now running!')
 
     @bot.event
@@ -72,6 +78,7 @@ def run_discord_bot():
         rank = rank.lower()
         equipment = equipment.lower()
         
+        # Error handling
         if cubeName not in cubeList:
             await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
             return
@@ -98,15 +105,19 @@ def run_discord_bot():
             await ctx.send("Error (level): Please input value between 120 and 250")
             return
 
+        # Roll cubes
         cs = CubeSimulator(cubeName, rank, equipment, level)
         
         res = cs.rollCube()
         
+        # Put the result in to Embed
         embed = discord.Embed(title="Cube result", color = discord.Color.orange())
         embed.add_field(name = f'Rolling {cubeName} cube on lvl {level} {equipment}. Current rank : {rank} \n', value = res)
 
+        # Send reply
         await ctx.reply(embed=embed, mention_author=False)
 
+    # Actually run the bot
     bot.run(TOKEN)
 
 if __name__ == '__main__':
