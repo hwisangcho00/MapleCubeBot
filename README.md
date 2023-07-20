@@ -3,7 +3,7 @@ MapleCubeBot is a discord bot that allows server members to simulate the Maplest
 
 ## Installation
 Use the below link to add this bot to your server: \
-https://discord.com/api/oauth2/authorize?client_id=1117685304007086180&permissions=36507434048&scope=bot
+https://top.gg/bot/1117685304007086180
 
 ## Usage
 In the current version, MapleCubeBot supports a single command: **!cube \<cubeName> \<rank> \<equipment> \<level>**\
