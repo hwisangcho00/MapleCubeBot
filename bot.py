@@ -5,7 +5,8 @@ import os
 import random
 import cubeProb
 from CubeSimulator import CubeSimulator
-from cubeIdx import cubeList, rankList, equipmentList
+from cubeIdx import cubeList, rankList, equipmentList, rankIdx
+from RankUpSimulator import RankUpSimulator
 
 from dotenv import load_dotenv
 
@@ -48,6 +49,7 @@ def run_discord_bot():
     """
 
     load_dotenv()
+    TEST_TOKEN = os.getenv('TEST_TOKEN')
     TOKEN = os.getenv('DISCORD_TOKEN')
 
     # Bot initialization
@@ -65,6 +67,101 @@ def run_discord_bot():
     async def on_command_error(ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument):
           await ctx.send("Please pass in all required arguments. Type <!help cube> for more information.")
+
+    @bot.command(name='miracle')
+    async def miracle(ctx, cubeName:str, startRank:str, targetRank:str, repetition: str):
+        """
+        cubeName: glowing / bright
+        startRank: rare, epic, unique
+        targetRank: epic, unique, legendary
+        repetition: 1 ~ 200
+        """
+        cubeName = cubeName.lower()
+        startRank = startRank.lower()
+        targetRank = targetRank.lower()
+
+        if cubeName not in cubeList:
+          await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
+          return
+        
+        if startRank not in rankList:
+          await ctx.send(f'Error (startRank): {startRank} is not a valid tier')
+          return
+        
+        if targetRank not in rankList:
+          await ctx.send(f'Error (targetRank): {targetRank} is not a valid tier')
+          return
+        
+        if rankIdx[startRank] >= rankIdx[targetRank]:
+          await ctx.send(f'Error (startRank, targetRank): startRank must be a strictly lower rank than targetRank')
+          return
+        
+        if not repetition.isnumeric(): 
+            await ctx.send("Error (repetition): Please input a numeric value between 1 and 200")
+            return
+
+        repetition = int(repetition)
+
+        if not 1 <= repetition <= 200:
+            await ctx.send("Error (repetition): Please input value between 1 and 200")
+            return
+
+        rus = RankUpSimulator(cubeName, startRank, targetRank)
+
+        res = rus.miracleRank(repetition)
+
+        embed = discord.Embed(title="Miracle day result", color = discord.Color.pink())
+        embed.add_field(name = f'Rolling {cubeName} cube', value = res)
+
+        await ctx.reply(embed=embed, mention_author=False)
+
+    @bot.command(name='rank')
+    async def rank(ctx, cubeName:str, startRank:str, targetRank:str, repetition: str):
+        """
+        cubeName: glowing / bright
+        startRank: rare, epic, unique
+        targetRank: epic, unique, legendary
+        repetition: 1 ~ 200
+        """
+        cubeName = cubeName.lower()
+        startRank = startRank.lower()
+        targetRank = targetRank.lower()
+
+        if cubeName not in cubeList:
+          await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
+          return
+        
+        if startRank not in rankList:
+          await ctx.send(f'Error (startRank): {startRank} is not a valid tier')
+          return
+        
+        if targetRank not in rankList:
+          await ctx.send(f'Error (targetRank): {targetRank} is not a valid tier')
+          return
+        
+        if rankIdx[startRank] >= rankIdx[targetRank]:
+          await ctx.send(f'Error (startRank, targetRank): startRank must be a strictly lower rank than targetRank')
+          return
+        
+        if not repetition.isnumeric(): 
+            await ctx.send("Error (repetition): Please input a numeric value between 1 and 200")
+            return
+
+        repetition = int(repetition)
+
+        if not 1 <= repetition <= 200:
+            await ctx.send("Error (repetition): Please input value between 1 and 200")
+            return
+
+        rus = RankUpSimulator(cubeName, startRank, targetRank)
+
+        res = rus.rank(repetition)
+
+        embed = discord.Embed(title="Rank up result", color = discord.Color.pink())
+        embed.add_field(name = f'Rolling {cubeName} cube', value = res)
+
+        await ctx.reply(embed=embed, mention_author=False)
+
 
     @bot.command(name='cube')
     async def cube(ctx, cubeName: str, rank: str, equipment:str , level: str):
@@ -119,6 +216,8 @@ def run_discord_bot():
 
     # Actually run the bot
     bot.run(TOKEN)
+    # Test Option
+    #bot.run(TEST_TOKEN)
 
 if __name__ == '__main__':
   # run the bot
