@@ -2,8 +2,8 @@ import discord
 from discord.ext import commands
 import os
 from CubeSimulator import CubeSimulator
-from cubeIdx import cubeList, rankList, equipmentList, rankIdx
-from RankUpSimulator import RankUpSimulator
+from cubeIdx import cubeList, tierList, equipmentList, tierIdx
+from RankUpSimulator import TierUpSimulator
 from DatabaseConnector import DatabaseConnector
 
 
@@ -70,30 +70,30 @@ def run_discord_bot():
           await ctx.send("Please pass in all required arguments. Type <!help cube> for more information.")
 
     @bot.command(name='miracle')
-    async def miracle(ctx, cubeName:str, startRank:str, targetRank:str, repetition: str):
+    async def miracle(ctx, cubeName:str, startTier:str, targetTier:str, repetition: str):
         """
         cubeName: glowing / bright
-        startRank: rare, epic, unique
-        targetRank: epic, unique, legendary
+        startTier: rare, epic, unique
+        targetTier: epic, unique, legendary
         repetition: 1 ~ 200
         """
         cubeName = cubeName.lower()
-        startRank = startRank.lower()
-        targetRank = targetRank.lower()
+        startTier = startTier.lower()
+        targetTier = targetTier.lower()
 
         if cubeName not in cubeList:
           await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
           return
         
-        if startRank not in rankList:
-          await ctx.send(f'Error (startRank): {startRank} is not a valid tier')
+        if startTier not in tierList:
+          await ctx.send(f'Error (startRank): {startTier} is not a valid tier')
           return
         
-        if targetRank not in rankList:
-          await ctx.send(f'Error (targetRank): {targetRank} is not a valid tier')
+        if targetTier not in tierList:
+          await ctx.send(f'Error (targetRank): {targetTier} is not a valid tier')
           return
         
-        if rankIdx[startRank] >= rankIdx[targetRank]:
+        if tierIdx[startTier] >= tierIdx[targetTier]:
           await ctx.send(f'Error (startRank, targetRank): startRank must be a strictly lower rank than targetRank')
           return
         
@@ -107,9 +107,9 @@ def run_discord_bot():
             await ctx.send("Error (repetition): Please input value between 1 and 200")
             return
 
-        rus = RankUpSimulator(cubeName, startRank, targetRank)
+        rus = TierUpSimulator(cubeName, startTier, targetTier)
 
-        res = rus.miracleRank(repetition)
+        res = rus.miracleTierUp(repetition)
 
         embed = discord.Embed(title="Miracle day result", color = discord.Color.pink())
         embed.add_field(name = f'Rolling {cubeName} cube', value = res)
@@ -118,32 +118,32 @@ def run_discord_bot():
 
         dc.incrementLog("miracle")
 
-    @bot.command(name='rank')
-    async def rank(ctx, cubeName:str, startRank:str, targetRank:str, repetition: str):
+    @bot.command(name='tier')
+    async def tier(ctx, cubeName:str, startTier:str, targetTier:str, repetition: str):
         """
         cubeName: glowing / bright
-        startRank: rare, epic, unique
-        targetRank: epic, unique, legendary
+        startTier: rare, epic, unique
+        targetTier: epic, unique, legendary
         repetition: 1 ~ 200
         """
         cubeName = cubeName.lower()
-        startRank = startRank.lower()
-        targetRank = targetRank.lower()
+        startTier = startTier.lower()
+        targetTier = targetTier.lower()
 
         if cubeName not in cubeList:
           await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
           return
         
-        if startRank not in rankList:
-          await ctx.send(f'Error (startRank): {startRank} is not a valid tier')
+        if startTier not in tierList:
+          await ctx.send(f'Error (startTier): {startTier} is not a valid tier')
           return
         
-        if targetRank not in rankList:
-          await ctx.send(f'Error (targetRank): {targetRank} is not a valid tier')
+        if targetTier not in tierList:
+          await ctx.send(f'Error (targetTier): {targetTier} is not a valid tier')
           return
         
-        if rankIdx[startRank] >= rankIdx[targetRank]:
-          await ctx.send(f'Error (startRank, targetRank): startRank must be a strictly lower rank than targetRank')
+        if tierIdx[startTier] >= tierIdx[targetTier]:
+          await ctx.send(f'Error (startTier, targetTier): startTier must be a strictly lower tier than targetTier')
           return
         
         if not repetition.isnumeric(): 
@@ -156,28 +156,28 @@ def run_discord_bot():
             await ctx.send("Error (repetition): Please input value between 1 and 200")
             return
 
-        rus = RankUpSimulator(cubeName, startRank, targetRank)
+        rus = TierUpSimulator(cubeName, startTier, targetTier)
 
-        res = rus.rank(repetition)
+        res = rus.tierUp(repetition)
 
-        embed = discord.Embed(title="Rank up result", color = discord.Color.pink())
+        embed = discord.Embed(title="Tier up result", color = discord.Color.pink())
         embed.add_field(name = f'Rolling {cubeName} cube', value = res)
 
         await ctx.reply(embed=embed, mention_author=False)
 
-        dc.incrementLog("rank")
+        dc.incrementLog("tier")
 
 
     @bot.command(name='cube')
-    async def cube(ctx, cubeName: str, rank: str, equipment:str , level: str):
+    async def cube(ctx, cubeName: str, tier: str, equipment:str , level: str):
         """
         cubeName: glowing / bright
-        rank: legendary
+        tier: legendary
         equipment: weapon / emblem / secondary / eye / face / earrings / pendant / ring / hat / top / overall / bottom
         level: 120 ~ 250
         """
         cubeName = cubeName.lower()
-        rank = rank.lower()
+        tier = tier.lower()
         equipment = equipment.lower()
         
         # Error handling
@@ -185,12 +185,12 @@ def run_discord_bot():
             await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
             return
 
-        if rank not in rankList:
-            await ctx.send(f'Error (rank): {rank} is not a valid tier')
+        if tier not in tierList:
+            await ctx.send(f'Error (tier): {tier} is not a valid tier')
             return
 
-        if rank != 'legendary':
-            await ctx.send("Currently only legendary rank is supported")
+        if tier != 'legendary':
+            await ctx.send("Currently only legendary tier is supported")
             return
 
         if equipment not in equipmentList:
@@ -208,13 +208,13 @@ def run_discord_bot():
             return
 
         # Roll cubes
-        cs = CubeSimulator(cubeName, rank, equipment, level)
+        cs = CubeSimulator(cubeName, tier, equipment, level)
         
         res = cs.rollCube()
         
         # Put the result in to Embed
         embed = discord.Embed(title="Cube result", color = discord.Color.orange())
-        embed.add_field(name = f'Rolling {cubeName} cube on lvl {level} {equipment}. Current rank : {rank} \n', value = res)
+        embed.add_field(name = f'Rolling {cubeName} cube on lvl {level} {equipment}. Current tier : {tier} \n', value = res)
 
         # Send reply
         await ctx.reply(embed=embed, mention_author=False)

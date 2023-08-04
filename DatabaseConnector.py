@@ -42,11 +42,15 @@ class DatabaseConnector:
         conn = psycopg2.connect(self.DATABASE_URL)
         with conn.cursor() as cur:
           try:
-            cur.execute("SET DATABASE = defaultdb")
-            cur.execute('''INSERT INTO log VALUES (DEFAULT, 'rank', current_timestamp);''')
-            conn.commit()
-            cur.close()
+            cur.execute("SELECT COUNT(*) FROM log")
+            print(cur.fetchall())
           except Exception as e:
                print(e)
           finally:
              conn.close()
+
+if __name__ == '__main__':
+  dc = DatabaseConnector()
+  dc.testDB()
+  
+  

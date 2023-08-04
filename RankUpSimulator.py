@@ -1,23 +1,23 @@
-from cubeIdx import rankUpList, rankIdx
+from cubeIdx import tierUpList, tierIdx
 import random
 
-class RankUpSimulator:
-    def __init__(self, cubeName: str, startRank: str, targetRank: str)-> str:
+class TierUpSimulator:
+    def __init__(self, cubeName: str, startTier: str, targetTier: str)-> str:
         self.cubeName = cubeName
-        self.startRank = startRank
-        self.targetRank = targetRank
+        self.startTier = startTier
+        self.targetTier = targetTier
 
-    def rank(self, repetition: int):
+    def tierUp(self, repetition: int):
         cubeI = 0 if self.cubeName == 'glowing' else 1
         mult = 12000000 if self.cubeName == 'glowing' else 22000000
-        probList = rankUpList[cubeI]
+        probList = tierUpList[cubeI]
 
         total = 0
 
         for _ in range(repetition):
           count = 0
-          current = rankIdx[self.startRank]
-          target = rankIdx[self.targetRank]
+          current = tierIdx[self.startTier]
+          target = tierIdx[self.targetTier]
           while current != target:
               count += 1
               rng = random.uniform(0, 100)
@@ -27,21 +27,20 @@ class RankUpSimulator:
 
         avg = round(total / repetition, 2)
         money = round(mult * avg)
-        return f"You used on average {avg} {self.cubeName} cubes to rank up from {self.startRank} to {self.targetRank}.\nYou spent {money:,} mesos"
-            
+        return f"You used on average {avg} {self.cubeName} cubes to tier up from {self.startTier} to {self.targetTier}.\nYou spent {money:,} mesos"
             
 
-    def miracleRank(self, repetition: int):
+    def miracleTierUp(self, repetition: int):
         cubeI = 0 if self.cubeName == 'glowing' else 1
         mult = 12000000 if self.cubeName == 'glowing' else 22000000
-        probList = rankUpList[cubeI]
+        probList = tierUpList[cubeI]
 
         total = 0
 
         for _ in range(repetition):
           count = 0
-          current = rankIdx[self.startRank]
-          target = rankIdx[self.targetRank]
+          current = tierIdx[self.startTier]
+          target = tierIdx[self.targetTier]
           while current != target:
               count += 1
               rng = random.uniform(0, 100)
@@ -51,7 +50,7 @@ class RankUpSimulator:
 
         avg = round(total / repetition, 2)
         money = round(mult * avg)
-        return f"You used on average {avg} {self.cubeName} cubes to rank up from {self.startRank} to {self.targetRank} during Miracle Time.\nYou spent {money:,} mesos"
+        return f"You used on average {avg} {self.cubeName} cubes to tier up from {self.startTier} to {self.targetTier} during Miracle Time.\nYou spent {money:,} mesos"
             
             
 

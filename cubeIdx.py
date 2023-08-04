@@ -2,8 +2,8 @@
 Master file that keeps track of names and potentials for the cubing
 """
 cubeList = ["glowing", "bright"]
-rankList = ["rare", "epic", "unique", "legendary"]
-rankUpList = [[14.10, 3.030, 2.484], [21.212, 8.372, 3.882]]
+tierList = ["rare", "epic", "unique", "legendary"]
+tierUpList = [[14.10, 3.030, 2.484], [21.212, 8.372, 3.882]]
 equipmentList = ["weapon", "emblem", "secondary", "eye", "face", "earrings", "pendant", "ring", 
                  "hat", "top", "overall", "bottom", 
                     "shoes", "gloves", "shoulder", "cape", "belt"]
@@ -18,5 +18,5 @@ validCheckList = ["Enables the <Decent Haste> skill", "Enables the <Decent Comba
 
 
 
-rankIdx = {v : i for i, v in enumerate(rankList)}
+tierIdx = {v : i for i, v in enumerate(tierList)}
 equipmentIdx = {v : i for i, v in enumerate(equipmentList)}
