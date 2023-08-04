@@ -1,12 +1,11 @@
 import discord
 from discord.ext import commands
-import responses
 import os
-import random
-import cubeProb
 from CubeSimulator import CubeSimulator
 from cubeIdx import cubeList, rankList, equipmentList, rankIdx
 from RankUpSimulator import RankUpSimulator
+from DatabaseConnector import DatabaseConnector
+
 
 from dotenv import load_dotenv
 
@@ -51,6 +50,8 @@ def run_discord_bot():
     load_dotenv()
     TEST_TOKEN = os.getenv('TEST_TOKEN')
     TOKEN = os.getenv('DISCORD_TOKEN')
+
+    dc = DatabaseConnector()
 
     # Bot initialization
     intents = discord.Intents.default()
@@ -115,6 +116,8 @@ def run_discord_bot():
 
         await ctx.reply(embed=embed, mention_author=False)
 
+        dc.incrementLog("miracle")
+
     @bot.command(name='rank')
     async def rank(ctx, cubeName:str, startRank:str, targetRank:str, repetition: str):
         """
@@ -161,6 +164,8 @@ def run_discord_bot():
         embed.add_field(name = f'Rolling {cubeName} cube', value = res)
 
         await ctx.reply(embed=embed, mention_author=False)
+
+        dc.incrementLog("rank")
 
 
     @bot.command(name='cube')
@@ -214,11 +219,15 @@ def run_discord_bot():
         # Send reply
         await ctx.reply(embed=embed, mention_author=False)
 
+        dc.incrementLog("cube")
+
     # Actually run the bot
     bot.run(TOKEN)
     # Test Option
-    #bot.run(TEST_TOKEN)
+    # bot.run(TEST_TOKEN)
+
+
 
 if __name__ == '__main__':
-  # run the bot
   run_discord_bot()
+  
