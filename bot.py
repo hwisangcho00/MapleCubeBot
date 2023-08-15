@@ -169,28 +169,20 @@ def run_discord_bot():
 
 
     @bot.command(name='cube')
-    async def cube(ctx, cubeName: str, tier: str, equipment:str , level: str):
+    async def cube(ctx, cubeName: str, equipment:str , level: str):
         """
+        Returns the appropriate 3-line legendary potentials
+
         cubeName: glowing / bright
-        tier: legendary
         equipment: weapon / emblem / secondary / eye / face / earrings / pendant / ring / hat / top / overall / bottom
         level: 120 ~ 250
         """
         cubeName = cubeName.lower()
-        tier = tier.lower()
         equipment = equipment.lower()
         
         # Error handling
         if cubeName not in cubeList:
             await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
-            return
-
-        if tier not in tierList:
-            await ctx.send(f'Error (tier): {tier} is not a valid tier')
-            return
-
-        if tier != 'legendary':
-            await ctx.send("Currently only legendary tier is supported")
             return
 
         if equipment not in equipmentList:
@@ -208,13 +200,13 @@ def run_discord_bot():
             return
 
         # Roll cubes
-        cs = CubeSimulator(cubeName, tier, equipment, level)
+        cs = CubeSimulator(cubeName, equipment, level)
         
         res = cs.rollCube()
         
         # Put the result in to Embed
-        embed = discord.Embed(title="Cube result", color = discord.Color.orange())
-        embed.add_field(name = f'Rolling {cubeName} cube on lvl {level} {equipment}. Current tier : {tier} \n', value = res)
+        embed = discord.Embed(title="Cube result", color = discord.Color.green())
+        embed.add_field(name = f'Rolling {cubeName} cube on lvl {level} {equipment}. Tier : Legendary \n', value = res)
 
         # Send reply
         await ctx.reply(embed=embed, mention_author=False)
@@ -222,9 +214,9 @@ def run_discord_bot():
         dc.incrementLog("cube")
 
     # Actually run the bot
-    bot.run(TOKEN)
+    # bot.run(TOKEN)
     # Test Option
-    # bot.run(TEST_TOKEN)
+    bot.run(TEST_TOKEN)
 
 
 
