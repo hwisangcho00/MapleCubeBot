@@ -34,7 +34,7 @@ class CubeSimulator:
                 prob = self.changeProb(prob, probList)
             resLine = self.rollLine(probList, prob)
             res += "- " + resLine + "\n"
-            print((lineNum + 1), resLine, '\n', self.validCount, '\n', probList, '\n')
+            print((lineNum + 1), resLine)
             # some potentials cannot appear more than once or twice
             self.updateValidCount(resLine)
         return res
@@ -90,7 +90,7 @@ class CubeSimulator:
                     if re.match(potential, k):
                         # change the base probability
                         prob -= v[self.cubeI]
-                        print("The following ability cannot appear anymore : ", k)
+                        # print("The following ability cannot appear anymore : ", k)
                         # delete the potential from the probability list
                         del probList[k]
 
