@@ -214,9 +214,9 @@ def run_discord_bot():
         dc.incrementLog("cube")
 
     # Actually run the bot
-    # bot.run(TOKEN)
+    bot.run(TOKEN)
     # Test Option
-    bot.run(TEST_TOKEN)
+    # bot.run(TEST_TOKEN)
 
 
 
