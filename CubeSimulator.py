@@ -8,10 +8,10 @@ class CubeSimulator:
     """
     Class that simulates the cubing logic of Maplestory
     """
-    def __init__(self, cubeName, rank, equipment, level) -> None:
+    def __init__(self, cubeName, equipment, level) -> None:
         self.cubeName = cubeName
         self.cubeI = 0 if self.cubeName == 'glowing' else 1
-        self.rank = rank
+        self.rank = 'legendary'
         self.equipment = equipment
         self.level = int(level)
         self.validCount = [0] * len(validCheckList)

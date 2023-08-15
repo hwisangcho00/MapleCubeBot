@@ -43,6 +43,7 @@ class DatabaseConnector:
         with conn.cursor() as cur:
           try:
             cur.execute("SELECT COUNT(*) FROM log")
+            # cur.execute("SELECT * FROM log")
             print(cur.fetchall())
           except Exception as e:
                print(e)
