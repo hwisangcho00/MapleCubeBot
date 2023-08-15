@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ext import commands
 import os
 from CubeSimulator import CubeSimulator
@@ -63,160 +64,172 @@ def run_discord_bot():
     @bot.event
     async def on_ready():   
         print(f'{bot.user} is now running!')
+        try:
+           synced = await bot.tree.sync()
+           print(f"Synced {len(synced)} command(s)")
+        except Exception as e:
+           print(e, "bot tree sync")
 
     @bot.event
     async def on_command_error(ctx, error):
         if isinstance(error, commands.errors.MissingRequiredArgument):
           await ctx.send("Please pass in all required arguments. Type <!help cube> for more information.")
 
-    @bot.command(name='miracle')
-    async def miracle(ctx, cubeName:str, startTier:str, targetTier:str, repetition: str):
+    @bot.tree.command(name="miracle", description="Simulate tier ups during DMT")
+    @app_commands.describe(cube_name = "glowing / bright", start_tier = "rare / epic / unique", target_tier = "epic / unique / legendary", repetition = "Number of tier up simulations")
+    async def miracle(interaction: discord.Interaction, cube_name:str, start_tier:str, target_tier:str, repetition: str):
         """
-        cubeName: glowing / bright
-        startTier: rare, epic, unique
-        targetTier: epic, unique, legendary
+        cube_name: glowing / bright
+        start_tier: rare, epic, unique
+        target_tier: epic, unique, legendary
         repetition: 1 ~ 200
         """
-        cubeName = cubeName.lower()
-        startTier = startTier.lower()
-        targetTier = targetTier.lower()
+        cube_name = cube_name.lower()
+        start_tier = start_tier.lower()
+        target_tier = target_tier.lower()
 
-        if cubeName not in cubeList:
-          await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
+        if cube_name not in cubeList:
+          await interaction.response.send_message(f'Error (cubeName): {cube_name} is not a valid cube')
           return
         
-        if startTier not in tierList:
-          await ctx.send(f'Error (startRank): {startTier} is not a valid tier')
+        if start_tier not in tierList:
+          await interaction.response.send_message(f'Error (startRank): {start_tier} is not a valid tier')
           return
         
-        if targetTier not in tierList:
-          await ctx.send(f'Error (targetRank): {targetTier} is not a valid tier')
+        if target_tier not in tierList:
+          await interaction.response.send_message(f'Error (targetRank): {target_tier} is not a valid tier')
+        
           return
         
-        if tierIdx[startTier] >= tierIdx[targetTier]:
-          await ctx.send(f'Error (startRank, targetRank): startRank must be a strictly lower rank than targetRank')
+        if tierIdx[start_tier] >= tierIdx[target_tier]:
+          await interaction.response.send_message(f'Error (startRank, targetRank): startRank must be a strictly lower rank than targetRank')
           return
         
         if not repetition.isnumeric(): 
-            await ctx.send("Error (repetition): Please input a numeric value between 1 and 200")
-            return
+          await interaction.response.send_message("Error (repetition): Please input a numeric value between 1 and 200")
+          return
 
         repetition = int(repetition)
 
         if not 1 <= repetition <= 200:
-            await ctx.send("Error (repetition): Please input value between 1 and 200")
-            return
+          await interaction.response.send_message("Error (repetition): Please input value between 1 and 200")
+          return
 
-        rus = TierUpSimulator(cubeName, startTier, targetTier)
+        rus = TierUpSimulator(cube_name, start_tier, target_tier)
 
         res = rus.miracleTierUp(repetition)
 
         embed = discord.Embed(title="Miracle day result", color = discord.Color.pink())
-        embed.add_field(name = f'Rolling {cubeName} cube', value = res)
+        embed.add_field(name = f'Rolling {cube_name} cube', value = res)
 
-        await ctx.reply(embed=embed, mention_author=False)
+        await interaction.response.send_message(embed=embed)
 
         dc.incrementLog("miracle")
 
-    @bot.command(name='tier')
-    async def tier(ctx, cubeName:str, startTier:str, targetTier:str, repetition: str):
+
+    @bot.tree.command(name="tier", description="Simulate regular tier ups")
+    @app_commands.describe(cube_name = "glowing / bright", start_tier = "rare / epic / unique", target_tier = "epic / unique / legendary", repetition = "Number of tier up simulations")
+    async def tier(interaction: discord.Interaction, cube_name:str, start_tier:str, target_tier:str, repetition: str):
         """
-        cubeName: glowing / bright
-        startTier: rare, epic, unique
-        targetTier: epic, unique, legendary
+        cube_name: glowing / bright
+        start_tier: rare, epic, unique
+        target_tier: epic, unique, legendary
         repetition: 1 ~ 200
         """
-        cubeName = cubeName.lower()
-        startTier = startTier.lower()
-        targetTier = targetTier.lower()
+        cube_name = cube_name.lower()
+        start_tier = start_tier.lower()
+        target_tier = target_tier.lower()
 
-        if cubeName not in cubeList:
-          await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
+        if cube_name not in cubeList:
+          await interaction.response.send_message(f'Error (cubeName): {cube_name} is not a valid cube')
           return
         
-        if startTier not in tierList:
-          await ctx.send(f'Error (startTier): {startTier} is not a valid tier')
+        if start_tier not in tierList:
+          await interaction.response.send_message(f'Error (startRank): {start_tier} is not a valid tier')
           return
         
-        if targetTier not in tierList:
-          await ctx.send(f'Error (targetTier): {targetTier} is not a valid tier')
+        if target_tier not in tierList:
+          await interaction.response.send_message(f'Error (targetRank): {target_tier} is not a valid tier')
+        
           return
         
-        if tierIdx[startTier] >= tierIdx[targetTier]:
-          await ctx.send(f'Error (startTier, targetTier): startTier must be a strictly lower tier than targetTier')
+        if tierIdx[start_tier] >= tierIdx[target_tier]:
+          await interaction.response.send_message(f'Error (startRank, targetRank): startRank must be a strictly lower rank than targetRank')
           return
         
         if not repetition.isnumeric(): 
-            await ctx.send("Error (repetition): Please input a numeric value between 1 and 200")
-            return
+          await interaction.response.send_message("Error (repetition): Please input a numeric value between 1 and 200")
+          return
 
         repetition = int(repetition)
 
         if not 1 <= repetition <= 200:
-            await ctx.send("Error (repetition): Please input value between 1 and 200")
-            return
+          await interaction.response.send_message("Error (repetition): Please input value between 1 and 200")
+          return
 
-        rus = TierUpSimulator(cubeName, startTier, targetTier)
+        rus = TierUpSimulator(cube_name, start_tier, target_tier)
 
         res = rus.tierUp(repetition)
 
         embed = discord.Embed(title="Tier up result", color = discord.Color.pink())
-        embed.add_field(name = f'Rolling {cubeName} cube', value = res)
+        embed.add_field(name = f'Rolling {cube_name} cube', value = res)
 
-        await ctx.reply(embed=embed, mention_author=False)
+        await interaction.response.send_message(embed=embed)
 
         dc.incrementLog("tier")
 
-
-    @bot.command(name='cube')
-    async def cube(ctx, cubeName: str, equipment:str , level: str):
+    @bot.tree.command(name="cube", description="Simulate cubing for 3-line legendary potentials")
+    @app_commands.describe(cube_name = "glowing / bright", equipment = "weapon / emblem / secondary / eye / face / earrings / pendant / ring / hat / top / overall / bottom", level = "120 ~ 250")
+    async def cube(interaction: discord.Interaction, cube_name: str, equipment:str , level: str):
         """
         Returns the appropriate 3-line legendary potentials
 
-        cubeName: glowing / bright
+        cube_name: glowing / bright
         equipment: weapon / emblem / secondary / eye / face / earrings / pendant / ring / hat / top / overall / bottom
+
         level: 120 ~ 250
         """
-        cubeName = cubeName.lower()
+
+        cube_name = cube_name.lower()
         equipment = equipment.lower()
         
         # Error handling
-        if cubeName not in cubeList:
-            await ctx.send(f'Error (cubeName): {cubeName} is not a valid cube')
+        if cube_name not in cubeList:
+            await interaction.response.send_message(f'Error (cube_name): {cube_name} is not a valid cube')
             return
 
         if equipment not in equipmentList:
-            await ctx.send(f'Error (equipment): {equipment} is not a valid equipment')
+            await interaction.response.send_message(f'Error (equipment): {equipment} is not a valid equipment')
             return
 
         if not level.isnumeric(): 
-            await ctx.send("Error (level): Please input a numeric value between 120 and 250")
+            await interaction.response.send_message("Error (level): Please input a numeric value between 120 and 250")
             return
 
         level = int(level)
 
         if not 120 <= level <= 250:
-            await ctx.send("Error (level): Please input value between 120 and 250")
+            await interaction.response.send_message("Error (level): Please input value between 120 and 250")
             return
 
         # Roll cubes
-        cs = CubeSimulator(cubeName, equipment, level)
+        cs = CubeSimulator(cube_name, equipment, level)
         
         res = cs.rollCube()
         
         # Put the result in to Embed
         embed = discord.Embed(title="Cube result", color = discord.Color.green())
-        embed.add_field(name = f'Rolling {cubeName} cube on lvl {level} {equipment}. Tier : Legendary \n', value = res)
+        embed.add_field(name = f'Rolling {cube_name} cube on lvl {level} {equipment}. Tier : Legendary \n', value = res)
 
         # Send reply
-        await ctx.reply(embed=embed, mention_author=False)
+        await interaction.response.send_message(embed=embed)
 
         dc.incrementLog("cube")
 
     # Actually run the bot
-    bot.run(TOKEN)
+    # bot.run(TOKEN)
     # Test Option
-    # bot.run(TEST_TOKEN)
+    bot.run(TEST_TOKEN)
 
 
 
