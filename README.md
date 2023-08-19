@@ -5,12 +5,33 @@ MapleCubeBot is a discord bot that allows server members to simulate the Maplest
 Use the below link to add this bot to your server: \
 https://top.gg/bot/1117685304007086180
 
+## Version update
+v1.0.0: now supports "cube" command \
+v1.1.0: now supports "miracle", "rank" command \
+v1.1.1: now connected to cockroachDB \
+v2.0.0: MapleCubeBot now supports slash commands 
+
 ## Usable commands
-#### !cube \<cubeName> \<equipment> \<level>
-You can check the possible list of arguments by using the following command: **!help cube**
-![image](https://github.com/hwisangcho00/MapleCubeBot/assets/81304520/ad3ddf72-5aaa-4a88-88ff-bdb06706d667)
-![image](https://github.com/hwisangcho00/MapleCubeBot/assets/81304520/eccb8e4c-d22a-42ba-95e4-3d902cdb8e07)
 
-#### !rank \<cubeName> \<startRank> \<targetRank> \<repetition>
+#### /cube \<cube_name\> \<equipment\> \<level\>
+```
+cube_name: glowing / bright
+equipment: weapon / emblem / secondary / eye / face / earrings / pendant / ring / hat / top / overall / bottom
+level: 120 ~ 250
+```
 
-#### !miracle \<cubeName> \<startRank> \<targetRank> \<repetition>
+#### /miracle \<cube_name\> \<start_tier\> \<target_tier\> \<repetition\>
+```
+cube_name: glowing / bright
+start_tier: rare, epic, unique
+target_tier: epic, unique, legendary
+repetition: 1 ~ 200
+```
+
+#### /rank \<cube_name\> \<start_tier\> \<target_tier\> \<repetition\>
+```
+cube_name: glowing / bright
+start_tier: rare, epic, unique
+target_tier: epic, unique, legendary
+repetition: 1 ~ 200
+```
