@@ -10,6 +10,7 @@ v1.0.0: now supports "cube" command \
 v1.1.0: now supports "miracle", "rank" command \
 v1.1.1: now connected to cockroachDB \
 v2.0.0: MapleCubeBot now supports slash commands 
+v2.0.1: "increase x per 10 character level" -> "x: +32" per v.244 update
 
 ## Usable commands
 
